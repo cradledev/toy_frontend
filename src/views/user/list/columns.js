@@ -4,9 +4,10 @@ import { Link } from 'react-router-dom'
 // ** Custom Components
 import Avatar from '@components/avatar'
 
+
 // ** Store & Actions
 import { store } from '@store/store'
-import { getUser, deleteUser } from '../store'
+import { getUser, deleteUser, editUser} from '../store'
 
 // ** Icons Imports
 import { Slack, User, Settings, Database, Edit2, MoreVertical, FileText, Trash2, Archive } from 'react-feather'
@@ -52,8 +53,6 @@ const renderRole = row => {
     </span>
   )
 }
-
-
 export const columns = [
   {
     name: 'User',
@@ -66,9 +65,9 @@ export const columns = [
         {renderClient(row)}
         <div className='d-flex flex-column'>
           <Link
-            to={`/apps/user/view/${row.id}`}
+            to={`/apps/user/view/${row._id}`}
             className='user_name text-truncate text-body'
-            onClick={() => store.dispatch(getUser(row.id))}
+            onClick={() => store.dispatch(getUser(row._id))}
           >
             <span className='fw-bolder'>{row.firstname + row.lastname}</span>
           </Link>
@@ -118,13 +117,16 @@ export const columns = [
             <DropdownItem
               tag={Link}
               className='w-100'
-              to={`/apps/user/view/${row.id}`}
-              onClick={() => store.dispatch(getUser(row.id))}
+              to={`/apps/user/view/${row._id}`}
+              onClick={() => store.dispatch(getUser(row._id))}
             >
               <FileText size={14} className='me-50' />
               <span className='align-middle'>Details</span>
             </DropdownItem>
-            <DropdownItem tag='a' href='/' className='w-100' onClick={e => e.preventDefault()}>
+            <DropdownItem tag='a' href='/' className='w-100' onClick={e => {
+              e.preventDefault()
+              store.dispatch(editUser({id : row._id, open : true}))
+            }}>
               <Archive size={14} className='me-50' />
               <span className='align-middle'>Edit</span>
             </DropdownItem>
@@ -134,7 +136,7 @@ export const columns = [
               className='w-100'
               onClick={e => {
                 e.preventDefault()
-                store.dispatch(deleteUser(row.id))
+                store.dispatch(deleteUser(row._id))
               }}
             >
               <Trash2 size={14} className='me-50' />

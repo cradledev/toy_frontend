@@ -3,9 +3,9 @@ import { Fragment, useState, useEffect } from 'react'
 
 // ** Table Columns
 import { columns } from './columns'
-
+import EditUserModal from './EditUser'
 // ** Store & Actions
-import { getAllData, getData } from '../store'
+import { getAllData, getData, editUser } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // ** Third Party Components
@@ -93,8 +93,8 @@ const UsersList = () => {
   const [sortColumn, setSortColumn] = useState('_id')
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [currentRole, setCurrentRole] = useState({ value: '', label: 'Select Role' })
-  // const [currentPlan, setCurrentPlan] = useState({ value: '', label: 'Select Plan' })
   const [currentStatus, setCurrentStatus] = useState({ value: null, label: 'Select Status', number: 0 })
+  const [modalOpen, setModalOpen] = useState(false)
 
   // ** Get data on mount
   useEffect(() => {
@@ -110,8 +110,17 @@ const UsersList = () => {
         status: currentStatus.value
       })
     )
+    
   }, [dispatch, store.data?.length, sort, sortColumn, currentPage])
 
+  useEffect(() => {
+    setModalOpen(store.editStatus)
+  }, [store.editStatus])
+  // ** Function to toggle modal
+  const toggleModal = () => {
+    setModalOpen(!modalOpen)
+    dispatch(editUser({id : store.selectedUser._id, open : false}))
+  }
   // ** User filter options
   const roleOptions = [
     { value: '', label: 'Select Role' },
@@ -332,6 +341,7 @@ const UsersList = () => {
           />
         </div>
       </Card>
+      <EditUserModal open={modalOpen} toggleModal={toggleModal} />
     </Fragment>
   )
 }

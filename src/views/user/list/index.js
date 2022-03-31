@@ -10,13 +10,15 @@ import StatsHorizontal from '@components/widgets/stats/StatsHorizontal'
 // ** Icons Imports
 import { User, UserPlus, UserCheck, UserX } from 'react-feather'
 
-import {useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 // ** Styles
 import '@styles/react/apps/app-users.scss'
 import { useEffect, useState } from 'react'
 
 const UsersList = () => {
+  const dispatch = useDispatch()
   const store = useSelector(state => state.users)
+  
   const [activeUsers, setActiveUsers] = useState(0)
   const [inActiveUsers, setInActiveUsers] = useState(0)
   useEffect(() => {
@@ -32,7 +34,7 @@ const UsersList = () => {
     } else {
       setInActiveUsers(0)
     }
-  }, [])
+  }, [dispatch, store.data?.length])
   return (
     <div className='app-user-list'>
       <Row>

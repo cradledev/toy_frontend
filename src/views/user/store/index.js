@@ -30,6 +30,22 @@ export const getUser = createAsyncThunk('appUsers/getUser', async id => {
   return response.data.user
 })
 
+export const editUser = createAsyncThunk('appUsers/editUser', async params => {
+  const {id, open} = params
+  if (open) {
+    const response = await apiClient.get(`/users/${id}`)
+    return {
+      editStatus : open,
+      user : response.data.user
+    }
+  } else {
+    return {
+      editStatus : open,
+      user : null
+    }
+  }
+  
+})
 export const addUser = createAsyncThunk('appUsers/addUser', async (user, { dispatch, getState }) => {
   await apiClient.post('/users', user)
   await dispatch(getData(getState().users.params))
@@ -51,6 +67,7 @@ export const appUsersSlice = createSlice({
     total: 1,
     params: {},
     allData: [],
+    editStatus : false,
     selectedUser: null
   },
   reducers: {},
@@ -66,6 +83,10 @@ export const appUsersSlice = createSlice({
       })
       .addCase(getUser.fulfilled, (state, action) => {
         state.selectedUser = action.payload
+      })
+      .addCase(editUser.fulfilled, (state, action) => {
+        state.selectedUser = action.payload.user
+        state.editStatus = action.payload.editStatus
       })
   }
 })
