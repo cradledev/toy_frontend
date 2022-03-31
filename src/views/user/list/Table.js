@@ -93,7 +93,7 @@ const UsersList = () => {
   const [sortColumn, setSortColumn] = useState('_id')
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [currentRole, setCurrentRole] = useState({ value: '', label: 'Select Role' })
-  const [currentStatus, setCurrentStatus] = useState({ value: null, label: 'Select Status', number: 0 })
+  const [currentStatus, setCurrentStatus] = useState({ value: "empty", label: 'Select Status', number: 0 })
   const [modalOpen, setModalOpen] = useState(false)
 
   // ** Get data on mount
@@ -119,7 +119,7 @@ const UsersList = () => {
   // ** Function to toggle modal
   const toggleModal = () => {
     setModalOpen(!modalOpen)
-    dispatch(editUser({id : store.selectedUser._id, open : false}))
+    dispatch(editUser({id : store.selectedUser?._id, open : false}))
   }
   // ** User filter options
   const roleOptions = [
@@ -138,9 +138,9 @@ const UsersList = () => {
   // ]
 
   const statusOptions = [
-    { value: 0, label: 'Select Status', number: 0 },
-    { value: 1, label: 'Active', number: 1 },
-    { value: 2, label: 'Inactive', number: 2 }
+    { value: "empty", label: 'Select Status', number: 0 },
+    { value: "active", label: 'Active', number: 1 },
+    { value: "inactive", label: 'Inactive', number: 2 }
   ]
 
   // ** Function in get data on page change

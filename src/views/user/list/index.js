@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux'
 // ** Styles
 import '@styles/react/apps/app-users.scss'
 import { useEffect, useState } from 'react'
+import { getAllData } from '../store'
 
 const UsersList = () => {
   const dispatch = useDispatch()
@@ -22,6 +23,7 @@ const UsersList = () => {
   const [activeUsers, setActiveUsers] = useState(0)
   const [inActiveUsers, setInActiveUsers] = useState(0)
   useEffect(() => {
+    dispatch(getAllData())
     let _temp = store.allData.filter(el => el._id === true)
     if (_temp.length !== 0) {
       setActiveUsers(_temp[0].number)
@@ -34,7 +36,7 @@ const UsersList = () => {
     } else {
       setInActiveUsers(0)
     }
-  }, [dispatch, store.data?.length])
+  }, [dispatch, store.data?.length, store.deleteStatus, store.editStatus])
   return (
     <div className='app-user-list'>
       <Row>

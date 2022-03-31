@@ -1,5 +1,5 @@
 // ** React Imports
-import { Fragment } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 
 // ** Reactstrap Imports
 import {
@@ -10,72 +10,44 @@ import {
   Label,
   Button,
   ModalBody,
-  ModalHeader,
-  FormFeedback
+  ModalHeader
 } from 'reactstrap'
 
-// ** Third Party Components
-import Select from 'react-select'
-import { User, Check, X } from 'react-feather'
-import { useForm, Controller } from 'react-hook-form'
-
-// ** Utils
-import { selectThemeColors } from '@utils'
+import { useSelector, useDispatch } from 'react-redux'
 
 // ** Styles
 import '@styles/react/libs/react-select/_react-select.scss'
-
-const statusOptions = [
-  { value: 'active', label: 'Active' },
-  { value: 'inactive', label: 'Inactive' },
-  { value: 'suspended', label: 'Suspended' }
-]
-
-const countryOptions = [
-  { value: 'uk', label: 'UK' },
-  { value: 'usa', label: 'USA' },
-  { value: 'france', label: 'France' },
-  { value: 'russia', label: 'Russia' },
-  { value: 'canada', label: 'Canada' }
-]
-
-const languageOptions = [
-  { value: 'english', label: 'English' },
-  { value: 'spanish', label: 'Spanish' },
-  { value: 'french', label: 'French' },
-  { value: 'german', label: 'German' },
-  { value: 'dutch', label: 'Dutch' }
-]
-
-const defaultValues = {
-  firstName: 'Bob',
-  lastName: 'Barton',
-  username: 'bob.dev'
-}
+import { updateUser } from '../store'
 
 const EditUserModal = ({open, toggleModal}) => {
   // ** States
-
+  const [bio, setBio] = useState("")
+  const [firstname, setFirstname] = useState("")
+  const [lastname, setLastname] = useState("")
+  const [email, setEmail] = useState("")
+  const [role, setRole] = useState("")
+  const [status, setStatus] = useState(false)
   // ** Hooks
-  const {
-    control,
-    setError,
-    handleSubmit,
-    formState: { errors }
-  } = useForm({ defaultValues })
-
-  const onSubmit = data => {
-    if (Object.values(data).every(field => field.length > 0)) {
-      return null
-    } else {
-      for (const key in data) {
-        if (data[key].length === 0) {
-          setError(key, {
-            type: 'manual'
-          })
-        }
-      }
+  const dispatch = useDispatch()
+  const store = useSelector(state => state.users)
+  useEffect(() => {
+    
+    setFirstname(store.selectedUser?.firstname)
+    setLastname(store.selectedUser?.lastname)
+    setEmail(store.selectedUser?.email)
+    setRole(store.selectedUser?.role)
+    setStatus(store.selectedUser?.status)
+    setBio(store.selectedUser?.bio)
+    if (!store.editStatus) {
+        toggleModal()
     }
+  }, [dispatch, store.selectedUser])
+
+  const onSubmit = () => {
+    const postData = {firstname, lastname, email, role : role.toUpperCase(), status, bio}
+    
+    const _id = store.selectedUser?._id
+    dispatch(updateUser({ id: _id, putData : postData}))
   }
 
   return (
@@ -87,131 +59,90 @@ const EditUserModal = ({open, toggleModal}) => {
             <h1 className='mb-1'>Edit User Information</h1>
             <p>Updating user details will receive a privacy audit.</p>
           </div>
-          <Row tag='form' className='gy-1 pt-75' onSubmit={handleSubmit(onSubmit)}>
+          <Row tag='form' className='gy-1 pt-75' onSubmit={e => {
+              e.preventDefault()
+              onSubmit()
+          }}>
             <Col md={6} xs={12}>
-              <Label className='form-label' for='firstName'>
-                First Name
-              </Label>
-              <Controller
-                control={control}
-                name='firstName'
-                render={({ field }) => {
-                  return (
-                    <Input
-                      {...field}
-                      id='firstName'
-                      placeholder='John'
-                      value={field.value}
-                      invalid={errors.firstName && true}
-                    />
-                  )
-                }}
-              />
-              {errors.firstName && <FormFeedback>Please enter a valid First Name</FormFeedback>}
-            </Col>
-            <Col md={6} xs={12}>
-              <Label className='form-label' for='lastName'>
-                Last Name
-              </Label>
-              <Controller
-                name='lastName'
-                control={control}
-                render={({ field }) => (
-                  <Input {...field} id='lastName' placeholder='Doe' invalid={errors.lastName && true} />
-                )}
-              />
-              {errors.lastName && <FormFeedback>Please enter a valid Last Name</FormFeedback>}
-            </Col>
-            <Col xs={12}>
-              <Label className='form-label' for='username'>
-                Username
-              </Label>
-              <Controller
-                name='username'
-                control={control}
-                render={({ field }) => (
-                  <Input {...field} id='username' placeholder='john.doe.007' invalid={errors.username && true} />
-                )}
-              />
-              {errors.username && <FormFeedback>Please enter a valid Username</FormFeedback>}
-            </Col>
-            <Col md={6} xs={12}>
-              <Label className='form-label' for='email'>
-                Billing Email
-              </Label>
-              <Input type='email' id='email' placeholder='example@domain.com' />
-            </Col>
-            <Col md={6} xs={12}>
-              <Label className='form-label' for='status'>
-                Status:
-              </Label>
-              <Select
-                id='status'
-                isClearable={false}
-                className='react-select'
-                classNamePrefix='select'
-                options={statusOptions}
-                theme={selectThemeColors}
-                defaultValue={statusOptions[0]}
-              />
-            </Col>
-            <Col md={6} xs={12}>
-              <Label className='form-label' for='tax-id'>
-                Tax ID
-              </Label>
-              <Input id='tax-id' defaultValue='Tax-8894' placeholder='Tax-1234' />
-            </Col>
-            <Col md={6} xs={12}>
-              <Label className='form-label' for='contact'>
-                Contact
-              </Label>
-              <Input id='contact' defaultValue='+1 609 933 4422' placeholder='+1 609 933 4422' />
-            </Col>
-            <Col md={6} xs={12}>
-              <Label className='form-label' for='language'>
-                Language
-              </Label>
-              <Select
-                id='language'
-                isClearable={false}
-                className='react-select'
-                classNamePrefix='select'
-                options={languageOptions}
-                theme={selectThemeColors}
-                defaultValue={languageOptions[0]}
-              />
-            </Col>
-            <Col md={6} xs={12}>
-              <Label className='form-label' for='country'>
-                Country
-              </Label>
-              <Select
-                id='country'
-                isClearable={false}
-                className='react-select'
-                classNamePrefix='select'
-                options={countryOptions}
-                theme={selectThemeColors}
-                defaultValue={countryOptions[0]}
-              />
-            </Col>
-            <Col xs={12}>
-              <div className='d-flex align-items-center'>
-                <div className='form-switch'>
-                  <Input type='switch' defaultChecked id='billing-switch' name='billing-switch' />
-                  <Label className='form-check-label' htmlFor='billing-switch'>
-                    <span className='switch-icon-left'>
-                      <Check size={14} />
-                    </span>
-                    <span className='switch-icon-right'>
-                      <X size={14} />
-                    </span>
-                  </Label>
-                </div>
-                <Label className='form-check-label fw-bolder' htmlFor='billing-switch'>
-                  Use as a billing address?
+                <Label className='form-label' for='firstname'>
+                    First Name
                 </Label>
-              </div>
+                <Input
+                    type='text'
+                    id='firstname'
+                    name='firstname'
+                    placeholder='John'
+                    value={firstname}
+                    onChange={e => {
+                        setFirstname(e.target.value)
+                    }}
+                    required
+                />
+            </Col>
+            <Col md={6} xs={12}>
+                <Label className='form-label' for='lastname'>
+                    Last Name
+                </Label>
+                <Input
+                    type='text'
+                    id='lastname'
+                    name='lastname'
+                    placeholder='Doe'
+                    value={lastname}
+                    onChange={e => {
+                        setLastname(e.target.value)
+                    }}
+                    required
+                />
+            </Col>
+            
+            <Col md={6} xs={12}>
+                <Label className='form-label' for='email'>
+                Email
+                </Label>
+                <Input
+                    type='email'
+                    id='email'
+                    name='email'
+                    placeholder='test@test.com'
+                    value={email}
+                    onChange={e => {
+                        setEmail(e.target.value)
+                    }}
+                    required
+                />
+              
+            </Col>
+            <Col md={6} xs={12}>
+                <Label className='form-label' for='role'>
+                    Select Role
+                </Label>
+                <Input type='select' id='role' name='role' value={role} onChange={e => {
+                    setRole(e.target.value)
+                }}>
+                    <option value='USER'>User</option>
+                    <option value='ADMIN'>Admin</option>
+                    <option value='SUPERADMIN'>Super Admin</option>
+                </Input>
+            </Col>
+            <Col md={6} xs={12}>
+                <Label className='form-label' for='status'>
+                    Select Status
+                </Label>
+                <Input type='select' id='status' name='status' value={status} onChange={e => {
+                    setStatus(e.target.value)
+                }}>
+                    <option value={true}>Active</option>
+                    <option value={false} >InActive</option>
+                </Input>
+            </Col>
+            <Col md={12} xs={12}>
+              <Label className='form-label' for='tax-id'>
+                Bio
+              </Label>
+              <Input id='bio' name='bio' type='textarea' rows='3' value={bio} onChange={e => {
+                  setBio(e.target.value)
+              }} placeholder='Bio text is here' />
             </Col>
             <Col xs={12} className='text-center mt-2 pt-50'>
               <Button type='submit' className='me-1' color='primary'>

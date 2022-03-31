@@ -35,7 +35,7 @@ const UserDropdown = () => {
   //** Vars
   const userAvatar = (userData && userData.avatar) || defaultAvatar
   const onLogout = () => {
-    const token = localStorage.getItem(useJwt.jwtConfig.storageTokenKeyName)
+    const token = JSON.parse(localStorage.getItem(useJwt.jwtConfig.storageTokenKeyName))
     const config = {
       headers: { Authorization: `Bearer ${token}`, "Content-type": "application/json" }
     }

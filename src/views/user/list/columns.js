@@ -7,7 +7,7 @@ import Avatar from '@components/avatar'
 
 // ** Store & Actions
 import { store } from '@store/store'
-import { getUser, deleteUser, editUser} from '../store'
+import { deleteUser, editUser, startDelete} from '../store'
 
 // ** Icons Imports
 import { Slack, User, Settings, Database, Edit2, MoreVertical, FileText, Trash2, Archive } from 'react-feather'
@@ -64,10 +64,16 @@ export const columns = [
       <div className='d-flex justify-content-left align-items-center'>
         {renderClient(row)}
         <div className='d-flex flex-column'>
-          <Link
+          {/* <Link
             to={`/apps/user/view/${row._id}`}
             className='user_name text-truncate text-body'
             onClick={() => store.dispatch(getUser(row._id))}
+          > */}
+          <Link
+            tag='a'
+            to='/'
+            className='user_name text-truncate text-body'
+            onClick={(e) => e.preventDefault()}
           >
             <span className='fw-bolder'>{row.firstname + row.lastname}</span>
           </Link>
@@ -114,7 +120,7 @@ export const columns = [
             <MoreVertical size={14} className='cursor-pointer' />
           </DropdownToggle>
           <DropdownMenu>
-            <DropdownItem
+            {/* <DropdownItem
               tag={Link}
               className='w-100'
               to={`/apps/user/view/${row._id}`}
@@ -122,7 +128,7 @@ export const columns = [
             >
               <FileText size={14} className='me-50' />
               <span className='align-middle'>Details</span>
-            </DropdownItem>
+            </DropdownItem> */}
             <DropdownItem tag='a' href='/' className='w-100' onClick={e => {
               e.preventDefault()
               store.dispatch(editUser({id : row._id, open : true}))
@@ -136,6 +142,7 @@ export const columns = [
               className='w-100'
               onClick={e => {
                 e.preventDefault()
+                store.dispatch(startDelete({ deleteStatus : true}))
                 store.dispatch(deleteUser(row._id))
               }}
             >

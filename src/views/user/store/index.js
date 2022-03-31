@@ -46,6 +46,19 @@ export const editUser = createAsyncThunk('appUsers/editUser', async params => {
   }
   
 })
+
+export const updateUser = createAsyncThunk('appUsers/updateUser', async (params, { dispatch, getState}) => {
+  const {id, putData} = params
+  const token = JSON.parse(localStorage.getItem("accessToken"))
+  const config = {
+    headers: { Authorization: `Bearer ${token}`, "Content-type": "application/json" }
+  }
+  await apiClient.put(`/users/${id}`, putData, config)
+  await dispatch(getData(getState().users.params))
+  await dispatch(getAllData())
+  return { editStatus : false }
+
+})
 export const addUser = createAsyncThunk('appUsers/addUser', async (user, { dispatch, getState }) => {
   await apiClient.post('/users', user)
   await dispatch(getData(getState().users.params))
@@ -57,7 +70,7 @@ export const deleteUser = createAsyncThunk('appUsers/deleteUser', async (id, { d
   await apiClient.delete(`/users/${id}/false`)
   await dispatch(getData(getState().users.params))
   await dispatch(getAllData())
-  return id
+  return { deleteStatus : false }
 })
 
 export const appUsersSlice = createSlice({
@@ -68,9 +81,14 @@ export const appUsersSlice = createSlice({
     params: {},
     allData: [],
     editStatus : false,
+    deleteStatus : false,
     selectedUser: null
   },
-  reducers: {},
+  reducers: {
+    startDelete: (state, action) => {
+      state.deleteStatus = action.payload.deleteStatus
+    }
+  },
   extraReducers: builder => {
     builder
       .addCase(getAllData.fulfilled, (state, action) => {
@@ -88,7 +106,15 @@ export const appUsersSlice = createSlice({
         state.selectedUser = action.payload.user
         state.editStatus = action.payload.editStatus
       })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.editStatus = action.payload.editStatus
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.deleteStatus = action.payload.deleteStatus
+      })
   }
 })
+
+export const { startDelete } = appUsersSlice.actions
 
 export default appUsersSlice.reducer
