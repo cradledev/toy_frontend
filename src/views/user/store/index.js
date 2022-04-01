@@ -49,11 +49,11 @@ export const editUser = createAsyncThunk('appUsers/editUser', async params => {
 
 export const updateUser = createAsyncThunk('appUsers/updateUser', async (params, { dispatch, getState}) => {
   const {id, putData} = params
-  const token = JSON.parse(localStorage.getItem("accessToken"))
-  const config = {
-    headers: { Authorization: `Bearer ${token}`, "Content-type": "application/json" }
-  }
-  await apiClient.put(`/users/${id}`, putData, config)
+  // const token = JSON.parse(localStorage.getItem("accessToken"))
+  // const config = {
+  //   headers: { Authorization: `Bearer ${token}`, "Content-type": "application/json" }
+  // }
+  await apiClient.put(`/users/${id}`, putData)
   await dispatch(getData(getState().users.params))
   await dispatch(getAllData())
   return { editStatus : false }

@@ -48,7 +48,7 @@ const renderRole = row => {
 
   return (
     <span className='text-truncate text-capitalize align-middle'>
-      <Icon size={18} className={`${roleObj[row.role] ? roleObj[row.role].class : ''} me-50`} />
+      <Icon size={18} className={`${roleObj[row.role.toLowerCase()] ? roleObj[row.role.toLowerCase()].class : ''} me-50`} />
       {row.role}
     </span>
   )

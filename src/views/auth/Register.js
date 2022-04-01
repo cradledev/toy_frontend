@@ -117,17 +117,17 @@ const Register = () => {
         }
     } else {
         for (const key in data) {
-        if (data[key].length === 0) {
-            setError(key, {
-            type: 'manual',
-            message: `Please enter a valid ${key}`
-            })
-        }
-        if (key === 'terms' && data.terms === false) {
-            setError('terms', {
-            type: 'manual'
-            })
-        }
+            if (data[key].length === 0) {
+                setError(key, {
+                type: 'manual',
+                message: `Please enter a valid ${key}`
+                })
+            }
+            if (key === 'terms' && data.terms === false) {
+                setError('terms', {
+                type: 'manual'
+                })
+            }
         }
         setFlag(false)
     }
