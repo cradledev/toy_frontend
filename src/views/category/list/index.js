@@ -1,5 +1,4 @@
 import { Card, CardHeader, CardBody, CardTitle} from 'reactstrap'
-import { Link } from 'react-router-dom'
 
 // import custom modals
 import EditCategoryModal from './EditCategory'
