@@ -18,11 +18,6 @@ const AuthRoutes = [
         }
     },
     {
-        path: '/home',
-        exact: true,
-        component: lazy(() => import('../../views/Home'))
-    },
-    {
         path: '/error',
         component: lazy(() => import('../../views/Error')),
         layout: 'BlankLayout'
