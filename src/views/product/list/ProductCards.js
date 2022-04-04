@@ -8,7 +8,7 @@ import { Star, Edit, Trash } from 'react-feather'
 // ** Reactstrap Imports
 import { Card, CardBody, CardText, Button, Badge } from 'reactstrap'
 
-const endpoint = "http://localhost:3001/api/v1"
+const endpoint = "http://192.168.116.44:3001/api/v1"
 const ProductCards = props => {
   // ** Props
   const {
@@ -31,7 +31,7 @@ const ProductCards = props => {
 
   // ** Renders products
   const renderProducts = () => {
-    if (products.length) {
+    if (products.length > 0) {
       return products.map((item, key) => {
         const CartBtnTag = 'button'
 
@@ -69,7 +69,7 @@ const ProductCards = props => {
                   {item.name}
                 </Link>
                 <CardText tag='span' className='item-company'>
-                  Category : &nbsp;<label className='text-success'>{item.category.name}</label>
+                  Category : &nbsp;<label className='text-success'>{item.category?.name}</label>
                 </CardText>
               </h6>
               <CardText className='item-description'>{item.description}</CardText>

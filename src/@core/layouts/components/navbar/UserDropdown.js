@@ -18,7 +18,7 @@ import { handleLogout } from '@store/authentication'
 import { UncontrolledDropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap'
 
 // ** Default Avatar Image
-import defaultAvatar from '@src/assets/images/portrait/small/avatar-s-11.jpg'
+import defaultAvatar from '@src/assets/images/portrait/small/user_avatar.png'
 
 const UserDropdown = () => {
   // ** State

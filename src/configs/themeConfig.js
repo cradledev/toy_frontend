@@ -4,7 +4,7 @@
 const themeConfig = {
   app: {
     appName: 'Toy Ecommerce',
-    appLogoImage: require('@src/assets/images/logo/logo.svg').default
+    appLogoImage: require('@src/assets/images/logo/logo.png').default
   },
   layout: {
     isRTL: false,

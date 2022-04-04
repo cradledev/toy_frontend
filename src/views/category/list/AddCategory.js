@@ -27,9 +27,11 @@ const AddCategoryModal = ({open, toggleModal}) => {
 
     useEffect(() => {
         setData(store.allData)
-        // if (!store.addStatus) {
-        //     toggleModal()
-        // }
+        if (!store.addStatus) {
+            setCategoryname("")
+            setParent("empty")
+            setData([])
+        }
     }, [dispatch, store.selectedCategoryForAdd])
    
     const onSubmit = () => {
@@ -79,6 +81,7 @@ const AddCategoryModal = ({open, toggleModal}) => {
                     <Input type='select' id='parent' name='parent' value={parent} onChange={e => {
                         setParent(e.target.value)
                     }}>
+                        <option key="top_level_category" value="empty" >Top Level</option>
                         { data.map((item, key) => {
                             return (
                                 <option key={key} value={item.id === null ? "empty" : item.id}>{item.id === null ? "Top Level" : item.name}</option>

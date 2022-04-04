@@ -19,7 +19,7 @@ import {apiClient } from '@utils'
 // ** Styles
 import '@styles/react/libs/react-select/_react-select.scss'
 
-const endpoint = "http://localhost:3001/api/v1"
+const endpoint = "http://192.168.116.44:3001/api/v1"
 
 const EditProductModal = (props) => {
     // ** Props
@@ -71,7 +71,6 @@ const EditProductModal = (props) => {
         event.preventDefault()
         const _id = store.productDetail?._id
         if (image.raw) {
-            console.log(1)
             const formData = new FormData()
             
             formData.append("category", category)
@@ -92,7 +91,6 @@ const EditProductModal = (props) => {
             dispatch(getProducts(store.params))
             // dispatch(updateProduct({id : _id, data : formData, type : "image"}))
         } else {
-            console.log(2)
             const data = {category, name : productname, description : productDescription, price, stock, status}
             dispatch(updateProduct({id : _id, data, type : "text"}))
         }

@@ -41,10 +41,17 @@ export const editCategory = createAsyncThunk('appCategory/editCategory', async p
 export const addStarting = createAsyncThunk('appCategory/addStarting', async params => {
     const {id, open} = params
     if (open) {
-      const response = await apiClient.get(`/categories/${id}`)
-      return {
-        addStatus : open,
-        category : response.data.category
+      if (id) {
+        const response = await apiClient.get(`/categories/${id}`)
+        return {
+          addStatus : open,
+          category : response.data.category
+        }  
+      } else {
+        return {
+          addStatus : open,
+          category : null
+        }
       }
     } else {
       return {

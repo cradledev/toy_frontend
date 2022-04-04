@@ -1,5 +1,5 @@
 // ** React Imports
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 
 import { Link } from 'react-router-dom'
 // ** Reactstrap Imports
@@ -55,7 +55,16 @@ const AddNewProductModal = (props) => {
     const [price, setPrice] = useState(0)
 
     const [image, setImage] = useState({ preview: "", raw: "" })
-
+    useEffect(() => {
+        if (!store.addStatus) {
+            setStatus(true)
+            setProductname("")
+            setProductDescription("")
+            setCategory("empty")
+            setStock(0)
+            setPrice(0)
+        }
+    }, [store.addStatus])
     const handleChange = e => {
         if (e.target.files.length) {
           setImage({
@@ -68,10 +77,12 @@ const AddNewProductModal = (props) => {
     const onSubmit = async (event) =>  {
         event.preventDefault()
         if (image.raw) {
-            console.log(1)
             const formData = new FormData()
-            
-            formData.append("category", category)
+            if (category === "empty") {
+                formData.append("category", categoryStore.allData[0].id)  
+            } else {
+                formData.append("category", category)
+            }
             formData.append("name", productname)
             if (productDescription) {
                 formData.append("description", productDescription)
@@ -80,12 +91,11 @@ const AddNewProductModal = (props) => {
             formData.append("stock", stock)
             formData.append("status", status)
             formData.append("image", image.raw)
-            const result = await apiClient.post("/products/", formData, { headers : {
+            await apiClient.post("/products/", formData, { headers : {
                 "content-type": "multipart/form-data",
                 Accept: '*/*'
                }
             })
-            console.log(result.data)
             dispatch(addStarting(false))
             dispatch(getProducts(store.params))
         } else {

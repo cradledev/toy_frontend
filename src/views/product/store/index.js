@@ -22,7 +22,6 @@ export const deleteProduct = createAsyncThunk('appEcommerce/deleteProduct', asyn
 
 export const editProduct = createAsyncThunk('appEcommerce/editProduct', async params => {
   const {id, open} = params
-  console.log(params)
   if (open) {
     const response = await apiClient.get(`/products/${id}`)
     return {
@@ -62,7 +61,6 @@ export const updateProduct = createAsyncThunk('appEcommerce/updateProduct', asyn
 })
 
 export const addStarting = createAsyncThunk('appEcommerce/addStarting', async flag => {
-  console.log(flag)
   return {
     addStatus : flag
   }

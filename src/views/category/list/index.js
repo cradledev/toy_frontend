@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardBody, CardTitle} from 'reactstrap'
+import { Card, CardHeader, CardBody, CardTitle, Button} from 'reactstrap'
 
 // import custom modals
 import EditCategoryModal from './EditCategory'
@@ -71,6 +71,10 @@ const CategoryList = () => {
       <Card>
         <CardHeader>
           <CardTitle>Product Category</CardTitle>
+          <CardTitle className='text-right'><Button.Ripple color='primary' className="me-1" onClick={() => {
+                dispatch(addStarting({ id : null, open : true}))
+              }} >+ Category</Button.Ripple>
+              </CardTitle>
         </CardHeader>
         <CardBody>
           <Tree
