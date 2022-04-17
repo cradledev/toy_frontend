@@ -63,6 +63,7 @@ const AddNewProductModal = (props) => {
             setCategory("empty")
             setStock(0)
             setPrice(0)
+            setImage({ preview: "", raw: "" })
         }
     }, [store.addStatus])
     const handleChange = e => {

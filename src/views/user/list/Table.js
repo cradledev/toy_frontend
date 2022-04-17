@@ -124,9 +124,9 @@ const UsersList = () => {
   // ** User filter options
   const roleOptions = [
     { value: '', label: 'Select Role' },
-    { value: 'ADMIN', label: 'Admin' },
-    { value: 'SUPERADMIN', label: 'Super Admin' },
-    { value: 'USER', label: 'User' }
+    { value: 'ADMIN', label: 'Administrator' },
+    { value: 'SUPERADMIN', label: 'Super Administrator' },
+    { value: 'USER', label: 'Customer' }
   ]
 
   // const planOptions = [

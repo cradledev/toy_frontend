@@ -80,7 +80,7 @@ const Sidebar = props => {
                             />
                             <Label className='form-check-label' for={category.id} onClick={() => {
                               const _params = data.params
-                              dispatch(getProducts({ ..._params, category: category.id }))
+                              dispatch(getProducts({ ..._params, category: category.id, page : 1 }))
                             }}>
                               {category.name}
                             </Label>

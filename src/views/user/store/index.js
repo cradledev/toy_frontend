@@ -66,10 +66,11 @@ export const addUser = createAsyncThunk('appUsers/addUser', async (user, { dispa
   return user
 })
 
-export const deleteUser = createAsyncThunk('appUsers/deleteUser', async (id, { dispatch, getState }) => {
-  await apiClient.delete(`/users/${id}/false`)
-  await dispatch(getData(getState().users.params))
-  await dispatch(getAllData())
+export const deleteUser = createAsyncThunk('appUsers/deleteUser', async (params, { dispatch, getState }) => {
+  const {id, flag} = params
+  await apiClient.delete(`/users/${id}/${flag}`)
+  dispatch(getData(getState().users.params))
+  dispatch(getAllData())
   return { deleteStatus : false }
 })
 

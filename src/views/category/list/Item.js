@@ -51,8 +51,11 @@ const CategoryItem = ({ id }) => {
                             className='w-100'
                             onClick={e => {
                                 e.preventDefault()
-                                store.dispatch(startDelete({ deleteStatus : true}))
-                                store.dispatch(deleteCategory(id))
+                                if (confirm("Are you want to procedd next action?")) { 
+                                    store.dispatch(startDelete({ deleteStatus : true}))
+                                    store.dispatch(deleteCategory(id))
+                                }
+                                
                             }}
                         >
                             <Trash size={14} className='me-50' />

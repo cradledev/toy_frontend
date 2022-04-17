@@ -16,18 +16,14 @@ import {
   Col,
   Card,
   Input,
-  Label,
-  Button,
-  CardBody,
-  CardTitle,
-  CardHeader
+  Label
 } from 'reactstrap'
 
 // ** Styles
 import '@styles/react/libs/react-select/_react-select.scss'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 // ** Table Header
-const CustomHeader = ({ handlePerPage, handleStatusChange, rowsPerPage, status, dispatch, addStarting }) => {
+const CustomHeader = ({ handlePerPage, rowsPerPage, handleStatusChange, status }) => {
   // ** Converts table to CSV
   
   return (
@@ -51,7 +47,7 @@ const CustomHeader = ({ handlePerPage, handleStatusChange, rowsPerPage, status, 
             <label htmlFor='rows-per-page'>Entries</label>
           </div>
         </Col>
-        <Col xl='6' className='d-flex align-items-center justify-content-xl-end justify-content-start flex-xl-nowrap flex-wrap flex-sm-row flex-column pe-xl-1 p-0 mt-xl-0 mt-1'>
+        <Col xl='6' className='d-flex align-items-center justify-content-xl-end p-0'>
             <div className='d-flex align-items-center table-header-actions'>
                 <div className='me-1 d-flex align-items-center'>
                     <Label className='mb-0' for='status-select'>Status</Label>
@@ -68,9 +64,6 @@ const CustomHeader = ({ handlePerPage, handleStatusChange, rowsPerPage, status, 
                         <option value='inactive'>Inactive</option>
                     </Input>
                 </div>
-                <Button className='add-new-user' color='primary' onClick={() => dispatch(addStarting(true))}>
-                    + Add
-                </Button>
             </div>
         </Col>
       </Row>
@@ -78,16 +71,16 @@ const CustomHeader = ({ handlePerPage, handleStatusChange, rowsPerPage, status, 
   )
 }
 
-const SliderList = props => {
+const ProductTable = props => {
 
-    const {store, dispatch, getData, addStarting} = props
+    const {store, dispatch, getProducts} = props
     // ** States
     
 
     // ** Function in get data on page change
     const handlePagination = page => {
         dispatch(
-            getData({...store.params, page : page.selected + 1})
+            getProducts({...store.params, page : page.selected + 1})
         )
     }
 
@@ -95,20 +88,19 @@ const SliderList = props => {
     const handlePerPage = e => {
         const value = parseInt(e.currentTarget.value)
         dispatch(
-            getData({...store.params, perPage : value})
+            getProducts({...store.params, perPage : value})
         )
     }
 
     const handleStatusChange = e => {
         const value = e.currentTarget.value
         dispatch(
-            getData({...store.params, status : value})
+            getProducts({...store.params, status : value})
         )
     }
     // ** Custom Pagination
     const CustomPagination = () => {
-        const count = Number(Math.ceil(store.total / store.params.perPage))
-
+        const count = Number(Math.ceil(store.totalProducts / store.params.perPage))
         return (
         <ReactPaginate
             previousLabel={''}
@@ -130,8 +122,8 @@ const SliderList = props => {
 
     // ** Table data to render
     const dataToRender = () => {
-        if (store.data?.length > 0) {
-            return store.data
+        if (store.products?.length > 0) {
+            return store.products
         } else  {
             return []
         }
@@ -139,13 +131,13 @@ const SliderList = props => {
 
     const handleSort = (column, sortDirection) => {
         dispatch(
-            getData({...store.params, sort : sortDirection, sortColumn : column.sortField})
+            getProducts({...store.params, sort : sortDirection, sortColumn : column.sortField})
         )
     }
 
     return (
         <Fragment>
-            <Card>
+            <Card className='overflow-hidden mt-1'>
                 <div className='react-dataTable'>
                 <DataTable
                     noHeader
@@ -164,10 +156,9 @@ const SliderList = props => {
                     <CustomHeader
                         rowsPerPage={store.params.perPage}
                         handlePerPage={handlePerPage}
-                        status={store.params.status}
                         dispatch={dispatch}
+                        status={store.params.status}
                         handleStatusChange={handleStatusChange}
-                        addStarting={addStarting}
                     />
                     }
                 />
@@ -177,4 +168,4 @@ const SliderList = props => {
     )
 }
 
-export default SliderList
+export default ProductTable

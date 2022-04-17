@@ -5,6 +5,7 @@ import UsersRoutes from './Users'
 import CategoriesRoutes from './Categories'
 import DashboardRoutes from './Dashboard'
 import ConfigurationsRoutes from './Configurations'
+import PromotionsRoutes from './Promotions'
 // ** Document title
 const TemplateTitle = '%s - Toy Ecommerce Admin Panel'
 
@@ -12,6 +13,6 @@ const TemplateTitle = '%s - Toy Ecommerce Admin Panel'
 const DefaultRoute = '/home'
 
 // ** Merge Routes
-const Routes = [...DashboardRoutes, ...AuthRoutes, ...OrdersRoutes, ...ProductsRoutes, ...UsersRoutes, ...CategoriesRoutes, ...ConfigurationsRoutes]
+const Routes = [...DashboardRoutes, ...AuthRoutes, ...OrdersRoutes, ...ProductsRoutes, ...UsersRoutes, ...CategoriesRoutes, ...ConfigurationsRoutes, ...PromotionsRoutes]
 
 export { DefaultRoute, TemplateTitle, Routes }

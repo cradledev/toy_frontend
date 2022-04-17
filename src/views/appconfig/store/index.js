@@ -64,8 +64,9 @@ export const addStarting = createAsyncThunk('appConfig/addStarting', async flag 
   }
 })
 
-export const deleteSlider = createAsyncThunk('appConfig/deleteSlider', async (id, { dispatch, getState}) => {
-  await apiClient.delete(`/config/slider/${id}/false`)
+export const deleteSlider = createAsyncThunk('appConfig/deleteSlider', async (params, { dispatch, getState}) => {
+  const {id, flag} = params
+  await apiClient.delete(`/config/slider/${id}/${flag}`)
   await dispatch(getData(getState().sliders.params))
   return id
 })

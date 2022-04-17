@@ -25,13 +25,13 @@ const NavbarUser = props => {
 
   return (
     <Fragment>
-      <div className='bookmark-wrapper d-flex align-items-center'>
+      {/* <div className='bookmark-wrapper d-flex align-items-center'>
         <NavItem className='d-none d-lg-block'>
           <NavLink className='nav-link-style'>
             <ThemeToggler />
           </NavLink>
         </NavItem>
-      </div>
+      </div> */}
       <ul className='nav navbar-nav align-items-center ms-auto'>
         <UserDropdown />
       </ul>

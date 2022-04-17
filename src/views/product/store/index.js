@@ -14,8 +14,16 @@ export const getProduct = createAsyncThunk('appEcommerce/getProduct', async id =
   return response.data.product
 })
 
-export const deleteProduct = createAsyncThunk('appEcommerce/deleteProduct', async (id, { dispatch, getState }) => {
-  await apiClient.delete(`/products/${id}/false`)
+export const deleteProduct = createAsyncThunk('appEcommerce/deleteProduct', async (params, { dispatch, getState }) => {
+  const {id, flag} = params
+  await apiClient.delete(`/products/${id}/${flag}`)
+  dispatch(getProducts(getState().products.params))
+  return id
+})
+
+export const asRecommend = createAsyncThunk('appEcommerce/asRecommend', async (params, { dispatch, getState }) => {
+  const {id, flag} = params
+  await apiClient.put(`/products/asrecommend/${id}/${flag}`)
   dispatch(getProducts(getState().products.params))
   return id
 })

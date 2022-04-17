@@ -6,6 +6,7 @@ import users from '@src/views/user/store'
 import categories from '@src/views/category/store'
 import products from '@src/views/product/store'
 import sliders from '@src/views/appconfig/store'
+import discounts from '@src/views/promotion/discount/store'
 const rootReducer = {
   auth,
   navbar,
@@ -13,7 +14,8 @@ const rootReducer = {
   users,
   categories,
   products,
-  sliders
+  sliders,
+  discounts
 }
 
 export default rootReducer

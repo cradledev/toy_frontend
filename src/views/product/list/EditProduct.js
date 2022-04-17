@@ -14,12 +14,18 @@ import {
   ModalHeader
 } from 'reactstrap'
 
-import {apiClient } from '@utils'
+// ** Third Party Components
+import Select from 'react-select'
+import makeAnimated from 'react-select/animated'
+
+import {apiClient, selectThemeColors} from '@utils'
 
 // ** Styles
 import '@styles/react/libs/react-select/_react-select.scss'
 
 const endpoint = "http://192.168.116.44:3001/api/v1"
+
+const animatedComponents = makeAnimated()
 
 const EditProductModal = (props) => {
     // ** Props
@@ -40,6 +46,9 @@ const EditProductModal = (props) => {
     const [category, setCategory] = useState('empty')
     const [stock, setStock] = useState(0)
     const [price, setPrice] = useState(0)
+    const [activeDiscount, setActiveDiscount] = useState(false)
+    const [events, setEvents] = useState([])
+    const [eventsOptions, setEventsOptions] = useState([])
 
     const [image, setImage] = useState({ preview: "", raw: "" })
 
@@ -51,14 +60,35 @@ const EditProductModal = (props) => {
           })
         }
     }
+    const getProductDiscounts = async () => {
+        const result = await apiClient.post("/discount/assignedProductDiscounts")
+        const _discounts = result.data.discounts
+         const newArrayOfObj = _discounts.map(({
+            _id: value, title : label
+          }) => ({
+            value, label
+          }))
+        console.log("new array object ======")
+        console.log(newArrayOfObj)
+        setEventsOptions(newArrayOfObj)
+    }
     useEffect(() => {
         if (store.productDetail) {
+            const _tp =  store.productDetail?.events
+            const _events = []
+            if (_tp.length > 0) {
+                 _tp.forEach(function(element) {
+                    _events.push({value : element._id, label : element.title})
+                })
+            }
             setProductname(store.productDetail?.name)
             setProductDescription(store.productDetail?.description === null ? "" : store.productDetail?.description)
             setCategory(store.productDetail?.category)
             setStock(store.productDetail?.stock)
             setPrice(store.productDetail?.price)
             setStatus(store.productDetail?.status)
+            setActiveDiscount(store.productDetail?.events.length > 0)
+            setEvents(_events)
             setImage({
                 preview: store.productDetail?.image ? `${endpoint}/products/image/${store.productDetail?.image}` : "",
                 raw: ""
@@ -67,9 +97,22 @@ const EditProductModal = (props) => {
         
     }, [dispatch, store.productDetail])
 
+    useEffect(() => {
+        getProductDiscounts()
+    }, [])
+    
     const onSubmit = async (event) =>  {
         event.preventDefault()
         const _id = store.productDetail?._id
+        let _putEvents = []
+        if (activeDiscount) {
+            if (events.length <= 0) {
+                alert("Please select the Discount")
+                return false
+            } else {
+                _putEvents = events.map(element => element['value'])
+            }
+        }
         if (image.raw) {
             const formData = new FormData()
             
@@ -82,6 +125,7 @@ const EditProductModal = (props) => {
             formData.append("stock", stock)
             formData.append("status", status)
             formData.append("image", image.raw)
+            formData.append("events", _putEvents)
             await apiClient.put(`/products/updateProduct/${_id}`, formData, { headers : {
                 "content-type": "multipart/form-data",
                 Accept: '*/*'
@@ -91,7 +135,7 @@ const EditProductModal = (props) => {
             dispatch(getProducts(store.params))
             // dispatch(updateProduct({id : _id, data : formData, type : "image"}))
         } else {
-            const data = {category, name : productname, description : productDescription, price, stock, status}
+            const data = {category, name : productname, description : productDescription, price, stock, status, events : _putEvents.length > 0 ? _putEvents : null}
             dispatch(updateProduct({id : _id, data, type : "text"}))
         }
         
@@ -199,6 +243,31 @@ const EditProductModal = (props) => {
                             setStock(e.target.value)
                         }} />
                     </Col>
+                    <Col md={12} xs={12} className="mt-1">
+                        <div className='form-check form-check-inline mt-2'>
+                            <Label for='activeDiscount' className='form-check-label'>
+                                Active Discount
+                            </Label>
+                            <Input type='checkbox' checked={activeDiscount} onChange={e => setActiveDiscount(e.target.checked)} name="activeDiscount"  id='activeDiscount' />
+                        </div>
+                    </Col>
+                    {activeDiscount ? (<Col md={12} xs={12} className="mt-1">
+                        <Label className='form-label'>Discount Select</Label>
+                        <Select
+                        isClearable={false}
+                        theme={selectThemeColors}
+                        closeMenuOnSelect={false}
+                        components={animatedComponents}
+                        value={events}
+                        onChange={value => {
+                            setEvents(value)
+                        }}
+                        isMulti
+                        options={eventsOptions}
+                        className='react-select'
+                        classNamePrefix='select'
+                        />
+                    </Col>) : ""}
                 </Col>
                 
                 <Col xs={12} className='text-center mt-2 pt-50'>

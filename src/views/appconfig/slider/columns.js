@@ -79,11 +79,11 @@ export const columns = [
               className='w-100'
               onClick={e => {
                 e.preventDefault()
-                store.dispatch(deleteSlider(row._id))
+                store.dispatch(deleteSlider({id : row._id, flag : !row.status}))
               }}
             >
               <Trash2 size={14} className='me-50' />
-              <span className='align-middle'>Delete</span>
+              <span className='align-middle'>Active/DeActive</span>
             </DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>

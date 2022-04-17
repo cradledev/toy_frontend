@@ -78,7 +78,7 @@ const CustomHeader = ({ handlePerPage, handleStatusChange, rowsPerPage, status, 
   )
 }
 
-const SliderList = props => {
+const Table = props => {
 
     const {store, dispatch, getData, addStarting} = props
     // ** States
@@ -145,7 +145,7 @@ const SliderList = props => {
 
     return (
         <Fragment>
-            <Card>
+            <Card className='overflow-hidden'>
                 <div className='react-dataTable'>
                 <DataTable
                     noHeader
@@ -177,4 +177,4 @@ const SliderList = props => {
     )
 }
 
-export default SliderList
+export default Table

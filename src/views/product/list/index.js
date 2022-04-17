@@ -11,14 +11,15 @@ import AddProductModal from './AddProduct'
 // ** Styles
 import '@styles/react/apps/app-ecommerce.scss'
 
+import '../widgets/custom.scss'
+
 // ** Store & Actions
 import { useDispatch, useSelector } from 'react-redux'
-import { getProducts, deleteProduct, editProduct, updateProduct, addStarting} from '../store'
+import { getProducts, editProduct, updateProduct, addStarting} from '../store'
 import { getAllData } from '../../category/store'
 
 const ProductList = () => {
   // ** States
-  const [activeView, setActiveView] = useState('grid')
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   // edit product mdal
@@ -47,10 +48,12 @@ const ProductList = () => {
     dispatch(
       getProducts({
         q: '',
-        sortBy: 'featured',
         category : null,
-        perPage: 9,
-        page: 1
+        perPage: 10,
+        page: 1,
+        sort : 'asc',
+        sortColumn : '_id',
+        status: "empty"
       })
     )
   }, [dispatch])
@@ -67,14 +70,10 @@ const ProductList = () => {
       <Products
         store={store}
         dispatch={dispatch}
-        activeView={activeView}
         getProducts={getProducts}
         sidebarOpen={sidebarOpen}
-        editProduct={editProduct}
         addStarting={addStarting}
-        setActiveView={setActiveView}
         setSidebarOpen={setSidebarOpen}
-        deleteProduct={deleteProduct}
       />
       <Sidebar sidebarOpen={sidebarOpen} data={store} dispatch={dispatch} getAllData={getAllData} getProducts={getProducts} />
       <EditProductModal open={modalOpen} categoryStore={categoryStore} editProduct={editProduct} updateProduct={updateProduct} store={store} dispatch={dispatch} getProducts={getProducts} toggleModal={toggleModal} />

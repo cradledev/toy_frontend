@@ -33,23 +33,26 @@ const renderRole = row => {
   const roleObj = {
     user: {
       class: 'text-primary',
-      icon: User
+      icon: User,
+      text : "Customer"
     },
     superadmin: {
       class: 'text-success',
-      icon: Database
+      icon: Database,
+      text : "Super Administrator"
     },
     admin: {
       class: 'text-danger',
-      icon: Slack
+      icon: Slack,
+      text : "Administrator"
     }
   }
   const Icon = roleObj[row.role.toLowerCase()] ? roleObj[row.role.toLowerCase()].icon : Edit2
-
+  const text = roleObj[row.role.toLowerCase()].text
   return (
     <span className='text-truncate text-capitalize align-middle'>
       <Icon size={18} className={`${roleObj[row.role.toLowerCase()] ? roleObj[row.role.toLowerCase()].class : ''} me-50`} />
-      {row.role}
+      {text}
     </span>
   )
 }
@@ -143,11 +146,11 @@ export const columns = [
               onClick={e => {
                 e.preventDefault()
                 store.dispatch(startDelete({ deleteStatus : true}))
-                store.dispatch(deleteUser(row._id))
+                store.dispatch(deleteUser({id : row._id, flag : !row.status}))
               }}
             >
               <Trash2 size={14} className='me-50' />
-              <span className='align-middle'>Delete</span>
+              <span className='align-middle'>Active/DeActive</span>
             </DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>

@@ -1,29 +1,17 @@
 // ** Third Party Components
-import classnames from 'classnames'
-import { Menu, Grid, List } from 'react-feather'
+import { Menu } from 'react-feather'
 
 // ** Reactstrap Imports
 import {
   Row,
   Col,
-  Button,
-  ButtonGroup,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  UncontrolledButtonDropdown
+  Button
 } from 'reactstrap'
 
 const ProductsHeader = props => {
   // ** Props
-  const { activeView, setActiveView, dispatch, getProducts, addStarting, store, setSidebarOpen } = props
+  const { dispatch, addStarting, store, setSidebarOpen } = props
 
-  // ** Sorting obj
-  const sortToggleText = {
-    'price-desc': 'Highest',
-    'price-asc': 'Lowest',
-    featured: 'Featured'
-  }
   return (
     <div className='ecommerce-header'>
       <Row>
@@ -41,55 +29,6 @@ const ProductsHeader = props => {
               <Button.Ripple color='primary' className="me-1" onClick={() => {
                 dispatch(addStarting(true))
               }} >+ Product</Button.Ripple>
-              <UncontrolledButtonDropdown className='dropdown-sort'>
-                <DropdownToggle className='text-capitalize me-1' color='primary' outline caret>
-                  {sortToggleText[store.params.sortBy]}
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem
-                    className='w-100'
-                    onClick={() => dispatch(getProducts({ ...store.params, sortBy: 'featured' }))}
-                  >
-                    Featured
-                  </DropdownItem>
-                  <DropdownItem
-                    className='w-100'
-                    onClick={() => dispatch(getProducts({ ...store.params, sortBy: 'price-asc' }))}
-                  >
-                    Lowest
-                  </DropdownItem>
-                  <DropdownItem
-                    className='w-100'
-                    onClick={() => dispatch(getProducts({ ...store.params, sortBy: 'price-desc' }))}
-                  >
-                    Highest
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledButtonDropdown>
-              <ButtonGroup>
-                <Button
-                  tag='label'
-                  className={classnames('btn-icon view-btn grid-view-btn', {
-                    active: activeView === 'grid'
-                  })}
-                  color='primary'
-                  outline
-                  onClick={() => setActiveView('grid')}
-                >
-                  <Grid size={18} />
-                </Button>
-                <Button
-                  tag='label'
-                  className={classnames('btn-icon view-btn list-view-btn', {
-                    active: activeView === 'list'
-                  })}
-                  color='primary'
-                  outline
-                  onClick={() => setActiveView('list')}
-                >
-                  <List size={18} />
-                </Button>
-              </ButtonGroup>
             </div>
           </div>
         </Col>

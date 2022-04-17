@@ -31,16 +31,16 @@ const EditUserModal = ({open, toggleModal}) => {
   const dispatch = useDispatch()
   const store = useSelector(state => state.users)
   useEffect(() => {
-    
-    setFirstname(store.selectedUser?.firstname)
-    setLastname(store.selectedUser?.lastname)
-    setEmail(store.selectedUser?.email)
-    setRole(store.selectedUser?.role)
-    setStatus(store.selectedUser?.status)
-    setBio(store.selectedUser?.bio)
-    if (!store.editStatus) {
-        toggleModal()
+    if (store.selectedUser) {
+      setFirstname(store.selectedUser?.firstname)
+      setLastname(store.selectedUser?.lastname)
+      setEmail(store.selectedUser?.email)
+      setRole(store.selectedUser?.role)
+      setStatus(store.selectedUser?.status)
+      setBio(store.selectedUser?.bio)
     }
+    
+    
   }, [dispatch, store.selectedUser])
 
   const onSubmit = () => {
